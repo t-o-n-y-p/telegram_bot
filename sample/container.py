@@ -1,12 +1,14 @@
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver import Chrome
+from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
+
+from sample import AVAILABLE_RATING_TYPES
 
 
 class RatingContainer:
     _chrome_options = Options()
     _chrome_options.add_argument('--headless')
-    _available_rating_types = ['open', 'men_rapid', 'men_blitz', 'women', 'women_rapid', 'women_blitz']
 
     def __init__(self):
         self._ratings = {}
@@ -14,11 +16,11 @@ class RatingContainer:
 
     def update_ratings(self):
         with Chrome(ChromeDriverManager().install(), options=self._chrome_options) as driver:
-            for rating_type in self._available_rating_types:
+            for rating_type in AVAILABLE_RATING_TYPES:
                 driver.get(f'https://ratings.fide.com/a_top.php?list={rating_type}')
-                top_ten = driver.find_elements_by_tag_name('tr')[1:11]
+                top_ten = driver.find_elements(By.TAG_NAME, 'tr')[1:11]
                 self._ratings[rating_type] = '\n'.join(
-                    f'{(td := tr.find_elements_by_tag_name("td"))[3].text} - {td[1].text}'
+                    f'{(td := tr.find_elements(By.TAG_NAME, "td"))[3].text} - {td[1].text}'
                     for tr in top_ten
                 )
 

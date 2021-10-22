@@ -4,7 +4,7 @@ from telegram import InlineKeyboardButton, Update, InlineKeyboardMarkup
 from telegram.ext import CallbackContext, Updater, CommandHandler, CallbackQueryHandler
 
 from container import RatingContainer
-from tgtoken import TOKEN
+from sample import TOKEN
 
 
 def _build_markup(button_rows):
